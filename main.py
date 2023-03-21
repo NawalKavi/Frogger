@@ -46,8 +46,6 @@ def blitImage(imageAddress, xyValues):
 
 frogX = centreImageXFrog(600, 40)
 frogY = centreImageYFrog(600, 40)
-frogChangeX = 0
-frogChangeY = 0
 
 # Game loop.
 gameRunning = True
@@ -59,25 +57,28 @@ while gameRunning:
         # Handles player movements.
         if gameEvent.type == KEYDOWN:
             if gameEvent.key == K_UP:
-                if frogY <= -25:
-                    frogChangeY += 0
+                if frogY <= 30:
+                    frogY += 0
                 else:
-                    frogChangeY -= 25
+                    frogY -= 25
+                print(frogY)
             if gameEvent.key == K_DOWN:
-                if frogY <= -675:
-                    frogChangeY += 0
+                if frogY >= 655:
+                    frogY += 0
                 else:
-                    frogChangeY += 25
+                    frogY += 25
+                print(frogY)
             if gameEvent.key == K_LEFT:
-                if frogX <= 25:
-                    frogChangeX += 0
+                if frogX <= 35:
+                    frogX += 0
                 else:
-                    frogChangeX -= 25
+                    frogX -= 25
             if gameEvent.key == K_RIGHT:
+                print(frogX)
                 if frogX >= 1175:
-                    frogChangeX += 0
+                    frogX += 0
                 else:
-                    frogChangeX += 25
+                    frogX += 25
             # Background music control.
             if gameEvent.key == K_p:
                 mixer.pause()
@@ -86,6 +87,6 @@ while gameRunning:
 
     mainWindow.fill((0, 0, 0))
     # Always blit images after drawing the initial background, because otherwise it'll just cover the images.
-    blitImage(imageDictionary["frog"], ((centreImageXFrog(600, 40) + frogChangeX), (centreImageYFrog(600, 40) + frogChangeY)))
+    blitImage(imageDictionary["frog"], ((centreImageXFrog(frogX, 50), (centreImageYFrog(frogY, 50)))))
     # Renders the game.
     display.flip()
