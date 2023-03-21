@@ -3,17 +3,18 @@ from pygame import *
 init()
 
 # Game window parameters.
-width = 1200
-height = 700
+width = 320
+height = 480
 mainWindow = display.set_mode((width, height))
 display.set_caption("The Chronicles of Big Poppa")
 
 # Images.
 imageDictionary = {
-    "frog": transform.scale(image.load("Images//Frog.png"), (50, 50)),
-    "frogWin": transform.scale(image.load("Images//Crowned Frog.png"), (70, 70)),
-    "blueBike": transform.scale(image.load("Images//Blue Bike.png"), (100, 100)),
-    "redCar": transform.scale(image.load("Images//Red Car.png"), (100, 100))
+    "frog": transform.scale(image.load("Images//Frog.png"), (30, 30)),
+    "frogWin": transform.scale(image.load("Images//Crowned Frog.png"), (50, 50)),
+    "blueBike": transform.scale(image.load("Images//Blue Bike.png"), (80, 80)),
+    "redCar": transform.scale(image.load("Images//Red Car.png"), (80, 80)),
+    "background": transform.scale(image.load("Images//Background.png"), (320, 480))
 }
 
 # Audio.
@@ -44,8 +45,8 @@ def centreImageYFrog(yTargetFrog, ySizeFrog):
 def blitImage(imageAddress, xyValues):
     mainWindow.blit(imageAddress, xyValues)
 
-frogX = centreImageXFrog(600, 40)
-frogY = centreImageYFrog(600, 40)
+frogX = centreImageXFrog(160, 30)
+frogY = centreImageYFrog(240, 30)
 
 # Game loop.
 gameRunning = True
@@ -60,25 +61,50 @@ while gameRunning:
                 if frogY <= 30:
                     frogY += 0
                 else:
-                    frogY -= 25
-                print(frogY)
-            if gameEvent.key == K_DOWN:
-                if frogY >= 655:
+                    frogY -= 30
+                print("Frog Y:", frogY)
+            if gameEvent.key == K_w:
+                if frogY <= 30:
                     frogY += 0
                 else:
-                    frogY += 25
-                print(frogY)
+                    frogY -= 30
+                print("Frog Y:", frogY)
+            if gameEvent.key == K_DOWN:
+                if frogY >= 465:
+                    frogY += 0
+                else:
+                    frogY += 30
+                print("Frog Y:", frogY)
+            if gameEvent.key == K_s:
+                if frogY >= 465:
+                    frogY += 0
+                else:
+                    frogY += 30
+                print("Frog Y:", frogY)
             if gameEvent.key == K_LEFT:
                 if frogX <= 35:
                     frogX += 0
                 else:
-                    frogX -= 25
-            if gameEvent.key == K_RIGHT:
-                print(frogX)
-                if frogX >= 1175:
+                    frogX -= 30
+                print("Frog X:", frogX)
+            if gameEvent.key == K_a:
+                if frogX <= 35:
                     frogX += 0
                 else:
-                    frogX += 25
+                    frogX -= 30
+                print("Frog X:", frogX)
+            if gameEvent.key == K_RIGHT:
+                if frogX >= 295:
+                    frogX += 0
+                else:
+                    frogX += 30
+                print("Frog X:", frogX)
+            if gameEvent.key == K_d:
+                if frogX >= 295:
+                    frogX += 0
+                else:
+                    frogX += 30
+                print("Frog X:", frogX)
             # Background music control.
             if gameEvent.key == K_p:
                 mixer.pause()
@@ -87,6 +113,7 @@ while gameRunning:
 
     mainWindow.fill((0, 0, 0))
     # Always blit images after drawing the initial background, because otherwise it'll just cover the images.
-    blitImage(imageDictionary["frog"], ((centreImageXFrog(frogX, 50), (centreImageYFrog(frogY, 50)))))
+    blitImage(imageDictionary["background"], (0, 0))
+    blitImage(imageDictionary["frog"], (centreImageXFrog(frogX, 30), (centreImageYFrog(frogY, 30))))
     # Renders the game.
     display.flip()
