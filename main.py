@@ -1,6 +1,8 @@
 # Initialising.
 from pygame import *
+from random import *
 init()
+
 
 # Game window parameters.
 width = 320
@@ -8,31 +10,27 @@ height = 480
 mainWindow = display.set_mode((width, height))
 display.set_caption("The Chronicles of Big Poppa")
 
+
 # Images.
 imageDictionary = {
     "frog": transform.scale(image.load("Images//Frog.png"), (30, 30)),
-    "frogWin": transform.scale(image.load("Images//Crowned Frog.png"), (50, 50)),
-    "blueBike": transform.scale(image.load("Images//Blue Bike.png"), (80, 80)),
-    "redCar": transform.scale(image.load("Images//Red Car.png"), (80, 80)),
+    "frogWin": transform.scale(image.load("Images//Crowned Frog.png"), (35, 35)),
+    "blueBike": transform.scale(image.load("Images//Blue Bike.png"), (40, 40)),
+    "redCar": transform.scale(image.load("Images//Red Car.png"), (40, 40)),
     "background": transform.scale(image.load("Images//Background.png"), (320, 480))
 }
 
+
 # Audio.
 audioDictionary = {
-    "widePutin": mixer.Sound("Audio//Song For Denise (Perfect Loop).mp3"),
-    "breakingBad": mixer.Sound("Audio//Breaking Bad (Extended Theme).mp3")
+    "breakingBad": mixer.Sound("Audio//Breaking Bad Theme Song (8 Bit).mp3"),
+    "a-Ha": mixer.Sound("Audio//Take On Me (8 Bit).mp3"),
+    "daftPunk": mixer.Sound("Audio//Harder Better Faster Stronger (8 Bit).mp3"),
+    "rickRoll": mixer.Sound("Audio//Never Gonna Give You Up (8 Bit).mp3")
 }
 
-# Music whatnot.
-mixer.Sound.play(audioDictionary["widePutin"])
 
 # Finds the top-left corner coordinates of an image.
-def centreImageX(xTarget, xSize):
-    return xTarget - xSize / 2
-
-def centreImageY(yTarget, ySize):
-    return yTarget - ySize / 2
-
 def centreImageXFrog(xTargetFrog, xSizeFrog):
     frogX = xTargetFrog - xSizeFrog / 2
     return frogX
@@ -41,12 +39,39 @@ def centreImageYFrog(yTargetFrog, ySizeFrog):
     frogY = yTargetFrog - ySizeFrog / 2
     return frogY
 
+
 # Blitting or something.
 def blitImage(imageAddress, xyValues):
     mainWindow.blit(imageAddress, xyValues)
 
-frogX = centreImageXFrog(160, 30)
-frogY = centreImageYFrog(240, 30)
+frogX = centreImageXFrog(175, 30)
+frogY = centreImageYFrog(385, 30)
+
+
+class Car():
+    def __init__(self, targetX, targetY, carSizeX, carSizeY):
+        self.targetX = targetX
+        self.targetY = targetY
+        self.carSizeX = carSizeX
+        self.carSizeY = carSizeY
+
+    def centreCarX(self):
+        return self.targetX - self.carSizeX / 2
+
+    def centreCarY(self):
+        return self.targetY - self.carSizeY / 2
+
+    def blitCar(self):
+        mainWindow.blit(imageDictionary["redCar"], (self.centreCarX(), self.centreCarY()))
+
+redCar = Car(30, 310, 50, 50)
+
+
+# Music whatnot.
+audioArray = ["breakingBad", "a-Ha", "daftPunk", "rickRoll"]
+audioSelector = randint(0, 3)
+mixer.Sound.play(audioDictionary[audioArray[audioSelector]])
+
 
 # Game loop.
 gameRunning = True
@@ -70,13 +95,13 @@ while gameRunning:
                     frogY -= 30
                 print("Frog Y:", frogY)
             if gameEvent.key == K_DOWN:
-                if frogY >= 465:
+                if frogY >= 460:
                     frogY += 0
                 else:
                     frogY += 30
                 print("Frog Y:", frogY)
             if gameEvent.key == K_s:
-                if frogY >= 465:
+                if frogY >= 460:
                     frogY += 0
                 else:
                     frogY += 30
@@ -110,10 +135,13 @@ while gameRunning:
                 mixer.pause()
             if gameEvent.key == K_u:
                 mixer.unpause()
-
+    # Initial Background.
     mainWindow.fill((0, 0, 0))
     # Always blit images after drawing the initial background, because otherwise it'll just cover the images.
     blitImage(imageDictionary["background"], (0, 0))
+    # River.
+    draw.rect(mainWindow, (7, 11, 120), Rect(00, 90, 320, 157))
     blitImage(imageDictionary["frog"], (centreImageXFrog(frogX, 30), (centreImageYFrog(frogY, 30))))
+    redCar.blitCar()
     # Renders the game.
     display.flip()
