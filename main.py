@@ -2,7 +2,7 @@
 from pygame import *
 from random import *
 init()
-
+gameRunning = True
 
 # Game window parameters.
 width = 320
@@ -26,29 +26,64 @@ audioDictionary = {
     "breakingBad": mixer.Sound("Audio//Breaking Bad Theme Song (8 Bit).mp3"),
     "a-Ha": mixer.Sound("Audio//Take On Me (8 Bit).mp3"),
     "daftPunk": mixer.Sound("Audio//Harder Better Faster Stronger (8 Bit).mp3"),
-    "rickRoll": mixer.Sound("Audio//Never Gonna Give You Up (8 Bit).mp3")
+    "rickRoll": mixer.Sound("Audio//Never Gonna Give You Up (8 Bit).mp3"),
+    "polishCow": mixer.Sound("Audio//Polish Cow (8 Bit).mp3"),
+    "downUnder": mixer.Sound("Audio//Down Under (8 Bit).mp3")
 }
-
-
-# Finds the top-left corner coordinates of an image.
-def centreImageXFrog(xTargetFrog, xSizeFrog):
-    frogX = xTargetFrog - xSizeFrog / 2
-    return frogX
-
-def centreImageYFrog(yTargetFrog, ySizeFrog):
-    frogY = yTargetFrog - ySizeFrog / 2
-    return frogY
 
 
 # Blitting or something.
 def blitImage(imageAddress, xyValues):
     mainWindow.blit(imageAddress, xyValues)
 
-frogX = centreImageXFrog(175, 30)
-frogY = centreImageYFrog(385, 30)
+class Frog:
+    def __init__(self, xTargetFrog, yTargetFrog, xSizeFrog, ySizeFrog, frogX, frogY):
+        self.xTargetFrog = xTargetFrog
+        self.yTargetFrog = yTargetFrog
+        self.xSizeFrog = xSizeFrog
+        self.ySizeFrog = ySizeFrog
+        self.frogX = frogX
+        self.frogY = frogY
 
+    def centreFrogX(self):
+        self.frogX = self.xTargetFrog - self.xSizeFrog / 2
+        return self.frogX
 
-class Car():
+    def centreFrogY(self):
+        self.frogY = self.yTargetFrog - self.ySizeFrog / 2
+        return self.frogY
+
+    def upMove(self):
+        if self.frogY >= 30:
+            self.frogY -= 30
+        print("Frog Y:", self.frogY)
+
+    def downMove(self):
+        if self.frogY <= 460:
+            self.frogY += 30
+        print("Frog Y:", self.frogY)
+
+    def leftMove(self):
+        if self.frogX >= 35:
+            self.frogX -= 30
+        print("Frog X:", self.frogX)
+
+    def rightMove(self):
+        if self.frogX <= 295:
+            self.frogX += 0
+
+        print("Frog X:", self.frogX)
+
+    def drowningDetection(self):
+        if self.frogY:
+            pass
+
+    def blitImage(self):
+        mainWindow.blit(imageDictionary["frog"], (self.centreFrogX(), self.centreFrogY()))
+
+bigPoppa = Frog(160, 385, 30, 30, None, None)
+
+class Car:
     def __init__(self, targetX, targetY, carSizeX, carSizeY):
         self.targetX = targetX
         self.targetY = targetY
@@ -56,92 +91,77 @@ class Car():
         self.carSizeY = carSizeY
 
     def centreCarX(self):
-        return self.targetX - self.carSizeX / 2
+        carX = self.targetX - self.carSizeX / 2
+        return carX
 
     def centreCarY(self):
-        return self.targetY - self.carSizeY / 2
+        carY = self.targetY - self.carSizeY / 2
+        return carY
 
     def blitCar(self):
         mainWindow.blit(imageDictionary["redCar"], (self.centreCarX(), self.centreCarY()))
 
-redCar = Car(30, 310, 50, 50)
+redCar = Car(30, 310, 40, 40)
 
 
 # Music whatnot.
-audioArray = ["breakingBad", "a-Ha", "daftPunk", "rickRoll"]
-audioSelector = randint(0, 3)
+audioArray = ["breakingBad", "a-Ha", "daftPunk", "rickRoll", "polishCow"]
+audioSelector = randint(0, 4)
 mixer.Sound.play(audioDictionary[audioArray[audioSelector]])
 
 
 # Game loop.
-gameRunning = True
 while gameRunning:
     for gameEvent in event.get():
+
         # Quits game.
         if gameEvent.type == QUIT:
             gameRunning = False
+
         # Handles player movements.
         if gameEvent.type == KEYDOWN:
+
+            # Up.
             if gameEvent.key == K_UP:
-                if frogY <= 30:
-                    frogY += 0
-                else:
-                    frogY -= 30
-                print("Frog Y:", frogY)
+                bigPoppa.upMove()
             if gameEvent.key == K_w:
-                if frogY <= 30:
-                    frogY += 0
-                else:
-                    frogY -= 30
-                print("Frog Y:", frogY)
+                bigPoppa.upMove()
+
+            # Down.
             if gameEvent.key == K_DOWN:
-                if frogY >= 460:
-                    frogY += 0
-                else:
-                    frogY += 30
-                print("Frog Y:", frogY)
-            if gameEvent.key == K_s:
-                if frogY >= 460:
-                    frogY += 0
-                else:
-                    frogY += 30
-                print("Frog Y:", frogY)
-            if gameEvent.key == K_LEFT:
-                if frogX <= 35:
-                    frogX += 0
-                else:
-                    frogX -= 30
-                print("Frog X:", frogX)
-            if gameEvent.key == K_a:
-                if frogX <= 35:
-                    frogX += 0
-                else:
-                    frogX -= 30
-                print("Frog X:", frogX)
-            if gameEvent.key == K_RIGHT:
-                if frogX >= 295:
-                    frogX += 0
-                else:
-                    frogX += 30
-                print("Frog X:", frogX)
+                bigPoppa.downMove()
             if gameEvent.key == K_d:
-                if frogX >= 295:
-                    frogX += 0
-                else:
-                    frogX += 30
-                print("Frog X:", frogX)
+                bigPoppa.downMove()
+
+            # Left.
+            if gameEvent.key == K_LEFT:
+                bigPoppa.leftMove()
+            if gameEvent.key == K_a:
+                bigPoppa.leftMove()
+
+            # Right.
+            if gameEvent.key == K_RIGHT:
+                bigPoppa.rightMove()
+            if gameEvent.key == K_d:
+                bigPoppa.rightMove()
+
             # Background music control.
             if gameEvent.key == K_p:
                 mixer.pause()
             if gameEvent.key == K_u:
                 mixer.unpause()
+
     # Initial Background.
     mainWindow.fill((0, 0, 0))
+
     # Always blit images after drawing the initial background, because otherwise it'll just cover the images.
     blitImage(imageDictionary["background"], (0, 0))
+
     # River.
     draw.rect(mainWindow, (7, 11, 120), Rect(00, 90, 320, 157))
-    blitImage(imageDictionary["frog"], (centreImageXFrog(frogX, 30), (centreImageYFrog(frogY, 30))))
+
+    # Objects.
+    bigPoppa.blitImage()
     redCar.blitCar()
     # Renders the game.
     display.flip()
