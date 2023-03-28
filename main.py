@@ -1,7 +1,11 @@
 # Initialising.
 import pygame
 from random import *
+
+from pygame.font import Font
+
 pygame.init()
+pygame.font.init()
 gameRunning = True
 
 # Game window parameters.
@@ -50,34 +54,70 @@ class Frog:
         self.frogY = frogY
 
     def upMove(self):
-        if self.frogY >= 25:
-            self.frogY -= 30
+        if self.frogY > 80:
+            if 0 < self.frogX < 40 or 75 < self.frogX < 130 or 160 < self.frogX < 215 or 215 < self.frogX < 300:
+                self.frogY += 0
+            if self.frogY < 75:
+                self.frogY += 0
+            else:
+                self.frogY -= 5
         print("Frog Y:", self.frogY)
 
     def downMove(self):
-        if self.frogY <= 440:
-            self.frogY += 30
+        if self.frogY < 445:
+            self.frogY += 0
+            if self.frogY < 75:
+                self.frogY += 0
+            else:
+                self.frogY += 5
         print("Frog Y:", self.frogY)
 
     def leftMove(self):
-        if self.frogX >= 25:
-            self.frogX -= 30
+        if self.frogX >= 0:
+            self.frogX += 0
+            if self.frogY < 75:
+                self.frogX += 0
+            else:
+                self.frogX -= 5
         print("Frog X:", self.frogX)
 
     def rightMove(self):
-        if self.frogX <= 275:
-            self.frogX += 30
+        if self.frogX <= 290:
+            self.frogX += 0
+            if self.frogY < 75:
+                self.frogX += 0
+            else:
+                self.frogX += 5
         print("Frog X:", self.frogX)
 
-    def drowningDetection(self):
-        if self.frogY:
-            pass
+    def winPosition(self):
+        if self.frogY < 81:
+            if 40 <= self.frogX <= 75:
+                self.frogX = 60
+                self.frogY = 55
+        if self.frogY < 81:
+            if 130 <= self.frogX <= 160:
+                self.frogX = 145
+                self.frogY = 55
+        if self.frogY < 81:
+            if 215 <= self.frogX <= 245:
+                self.frogX = 230
+                self.frogY = 55
+
 
     def blitImage(self):
         mainWindow.blit(imageDictionary["frog"], (self.frogX, self.frogY))
 
-bigPoppa = Frog(145, 415)
+bigPoppa1 = Frog(145, 415)
+bigPoppa2 = Frog(145, 415)
+bigPoppa3 = Frog(145, 415)
 
+
+# Movement boolean.
+moveLeft = False
+moveRight = False
+moveUp = False
+moveDown = False
 
 class Car:
 
@@ -161,6 +201,7 @@ log3 = Log(350, 205, 12, "Left")
 
 # Game loop.
 clock = pygame.time.Clock()
+endText = pygame.font.SysFont("monospace", 42)
 while gameRunning:
     for gameEvent in pygame.event.get():
 
@@ -173,27 +214,54 @@ while gameRunning:
 
             # Up.
             if gameEvent.key == pygame.K_UP:
-                bigPoppa.upMove()
+                moveUp = True
             if gameEvent.key == pygame.K_w:
-                bigPoppa.upMove()
+                moveUp = True
 
             # Down.
             if gameEvent.key == pygame.K_DOWN:
-                bigPoppa.downMove()
+                moveDown = True
             if gameEvent.key == pygame.K_s:
-                bigPoppa.downMove()
+                moveDown = True
 
             # Left.
             if gameEvent.key == pygame.K_LEFT:
-                bigPoppa.leftMove()
+                moveLeft = True
             if gameEvent.key == pygame.K_a:
-                bigPoppa.leftMove()
+                moveLeft = True
 
             # Right.
             if gameEvent.key == pygame.K_RIGHT:
-                bigPoppa.rightMove()
+                moveRight = True
             if gameEvent.key == pygame.K_d:
-                bigPoppa.rightMove()
+                moveRight = True
+
+
+        if gameEvent.type == pygame.KEYUP:
+
+            # Up.
+            if gameEvent.key == pygame.K_UP:
+                moveUp = False
+            if gameEvent.key == pygame.K_w:
+                moveUp = False
+
+            # Down.
+            if gameEvent.key == pygame.K_DOWN:
+                moveDown = False
+            if gameEvent.key == pygame.K_s:
+                moveDown = False
+
+            # Left.
+            if gameEvent.key == pygame.K_LEFT:
+                moveLeft = False
+            if gameEvent.key == pygame.K_a:
+                moveLeft = False
+
+            # Right.
+            if gameEvent.key == pygame.K_RIGHT:
+                moveRight = False
+            if gameEvent.key == pygame.K_d:
+                moveRight = False
 
             # Background music control.
             if gameEvent.key == pygame.K_p:
@@ -215,8 +283,45 @@ while gameRunning:
     # River.
     pygame.draw.rect(mainWindow, (7, 11, 120), pygame.Rect(00, 90, 320, 157))
 
-    # Objects.
-    bigPoppa.blitImage()
+    # Frog 1.
+    bigPoppa1.blitImage()
+    bigPoppa1.winPosition()
+    if moveUp:
+        bigPoppa1.upMove()
+    if moveDown:
+        bigPoppa1.downMove()
+    if moveRight:
+        bigPoppa1.rightMove()
+    if moveLeft:
+        bigPoppa1.leftMove()
+    if bigPoppa1.frogY < 60:
+
+        # Frog 2.
+        bigPoppa2.blitImage()
+        bigPoppa2.winPosition()
+        if moveUp:
+            bigPoppa2.upMove()
+        if moveDown:
+            bigPoppa2.downMove()
+        if moveRight:
+            bigPoppa2.rightMove()
+        if moveLeft:
+            bigPoppa2.leftMove()
+        if bigPoppa2.frogY < 60:
+
+            # Frog 3.
+            bigPoppa3.blitImage()
+            bigPoppa3.winPosition()
+            if moveUp:
+                bigPoppa3.upMove()
+            if moveDown:
+                bigPoppa3.downMove()
+            if moveLeft:
+                bigPoppa3.leftMove()
+            if moveRight:
+                bigPoppa3.rightMove()
+
+
 
     # Car.
     car.blitCar()
@@ -247,6 +352,12 @@ while gameRunning:
     log3.blitLog()
     log3.keepMoving()
     log3.moveLogBack()
+
+    # End screen.
+    if bigPoppa1.frogY < 60 and bigPoppa2.frogY < 60 and bigPoppa3.frogY < 60:
+        mainWindow.fill((0, 0, 0))
+        displayText = endText.render("GAME OVER", 1, (255, 255, 255))
+        mainWindow.blit(displayText, (50, 50))
 
     # Renders the game.
     pygame.display.flip()
