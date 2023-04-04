@@ -366,7 +366,7 @@ while gameRunning:
         bigPoppa1.rightMove()
     if moveLeft:
         bigPoppa1.leftMove()
-    if car1.collisionDetection() or car3.collisionDetection() or car3.collisionDetection():
+    if car1.collisionDetection() or car2.collisionDetection() or car3.collisionDetection():
         bigPoppa1.moveFrogAway()
         blitImage(imageDictionary["blackSquare"], (230, 5))
         deathCount += 1
@@ -399,7 +399,6 @@ while gameRunning:
         if car1.collisionDetection() or car2.collisionDetection() or car3.collisionDetection():
             bigPoppa2.moveFrogAway()
             blitImage(imageDictionary["blackSquare"], (230, 5))
-            deathCount += 1
         '''
             if log1.collisionDetection() or log2.collisionDetection() or log3.collisionDetection():
                 bigPoppa2.standOnLog()
