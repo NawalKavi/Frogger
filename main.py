@@ -48,6 +48,7 @@ audioSelector = randint(0, 4)
 pygame.mixer.Sound.play(audioDictionary[audioArray[audioSelector]])
 
 
+# Frog.
 class Frog:
 
     def __init__(self, frogX, frogY):
@@ -150,6 +151,7 @@ moveUp = False
 moveDown = False
 
 
+# Vehicles.
 class Car:
 
     def __init__(self, carX, carY, direction, speed):
@@ -195,6 +197,7 @@ car2 = Car(335, 325, "Left", 4)
 car3 = Car(-30, 370, "Right", 3)
 
 
+# Logs.
 class Log:
 
     def __init__(self, logX, logY, speed, direction):
@@ -245,7 +248,7 @@ log2 = Log(-80, 150, 1, "Right")
 log3 = Log(350, 205, 2, "Left")
 
 
-# Frame rate.
+# Frame rate and text.
 clock = pygame.time.Clock()
 endText = pygame.font.SysFont("monospace", 42)
 
@@ -478,3 +481,4 @@ while gameRunning:
     # Renders the game.
     pygame.display.flip()
     clock.tick(60)
+
