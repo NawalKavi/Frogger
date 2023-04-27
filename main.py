@@ -248,6 +248,7 @@ log2 = Log(-80, 150, 1, "Right")
 log3 = Log(350, 205, 2, "Left")
 
 
+# Frame rate.
 # Frame rate and text.
 clock = pygame.time.Clock()
 endText = pygame.font.SysFont("monospace", 42)
@@ -359,8 +360,8 @@ while gameRunning:
     '''
         bigPoppa1.drowningDetection()
         bigPoppa1.standOnLog()
-        bigPoppa1.winPosition()
     '''
+    bigPoppa1.winPosition()
     if moveUp:
         bigPoppa1.upMove()
     if moveDown:
@@ -481,4 +482,3 @@ while gameRunning:
     # Renders the game.
     pygame.display.flip()
     clock.tick(60)
-
